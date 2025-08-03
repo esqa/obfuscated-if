@@ -1,0 +1,14 @@
+build
+.idea/
+.idea
+.idea\
+.vs/
+.vs
+.vs\
+/cmake-build-debug
+/cmake-build-release
+*.xml
+
+**/.claude/settings.local.json
+/.cache
+/.idea
