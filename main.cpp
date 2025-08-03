@@ -1,35 +1,26 @@
 #include <iostream>
 
-__declspec(naked) int run_calculation()
+__declspec(naked) int check_condition()
 {
     __asm
     {
-        push ebp;
-        mov ebp, esp;
-
-        mov eax, [ebp + 16];
-        mov edx, [ebp + 20];
-
         sub eax, edx;
         shr eax, 31;
-
-        mov esp, ebp;
-        pop ebp;
         ret;
     }
 }
 
-int case_0_func()
+int case_0()
+{
+    return 20;
+}
+
+int case_1()
 {
     return 10;
 }
 
-int case_1_func()
-{
-    return 50;
-}
-
-int (*jump_table[2])() = { case_0_func, case_1_func };
+int (*jump_table[2])() = { case_0, case_1 };
 
 int main()
 {
@@ -37,25 +28,14 @@ int main()
 
     __asm
     {
-        push ebp;
-        mov ebp, esp;
-
-        push 40;
-        push 40;
-        push 30;
-        push 30;
-
-        call run_calculation;
+        mov eax, 10;
+        mov edx, 10;
+        call check_condition;
 
         mov ecx, offset jump_table;
         call dword ptr [ecx + eax * 4];
 
-        add esp, 16;
-
         mov retval, eax;
-        mov esp, ebp;
-        pop ebp;
-        ret;
     }
 
     printf("we're here! %i", retval);
